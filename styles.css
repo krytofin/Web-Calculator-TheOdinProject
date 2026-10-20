@@ -1,0 +1,39 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    margin: auto;
+    max-width: 50%;
+}
+.calculator_interface {
+    margin-top: 40px;
+}
+
+.calculator_interface {
+    background-color: black;
+    max-width: 50%;
+    border-radius: 5px;
+}
+
+.numbers_row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.short_btn {
+    font-size: 55px;
+    flex-grow: 0;
+    flex-basis: 20%;
+    gap: 20px;
+}
+.display {
+    padding: 15px;
+    color: green;
+    font-size: 40px;
+    background-color: grey;
+    margin: 10px;
+    margin-top: 10px;
+}
