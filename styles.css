@@ -37,3 +37,8 @@
     margin: 10px;
     margin-top: 10px;
 }
+
+.active {
+    color: grey;
+    background-color: rgb(93, 91, 91);
+}
