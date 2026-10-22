@@ -35,7 +35,13 @@ const MAX_DIGITS = 11;
 const display = document.querySelector(`.display_container`);
 
 function makeOperation(item){
-    let content = item.textContent;
+    let content;
+    if (typeof(item) == 'string'){
+        content = item;
+    }
+    else {
+        content = item.textContent;
+    }
     let operationArray = [...Object.keys(operators)];
     if (bigNum){
         display.textContent = "to big num";
@@ -75,15 +81,16 @@ function makeOperation(item){
         functionalButtons.forEach((btn) =>{
             btn.classList.remove('active');
         });
-        item.classList.toggle('active');
+        if (typeof(item) != 'string')
+            item.classList.toggle('active');
     }
-    else if (content == 'AC'){
+    else if (content == 'AC' || content == "Backspace"){
         leftOperand = "";
         righOperand = "";
         operation = "";
         isLeft = true;
     }
-    else if (content == 'DEL'){
+    else if (content == 'DEL' || content == 'Delete'){
         if (isLeft){
             leftOperand = leftOperand.slice(0, -1);
         }
@@ -145,3 +152,16 @@ allButtons.forEach((item)=>{
         makeOperation(item);
     })
 })
+
+let avaliableKeys = ['.', "=", '+', '-', '*', '/', 'Delete', "Backspace"];
+for (let i=0; i<10; i++){
+    avaliableKeys.push(String(i));
+}
+
+document.addEventListener(`keydown`, (evt) =>{
+    let currentKey = evt.key;
+    if (avaliableKeys.includes(currentKey)){
+        console.log(currentKey);
+        makeOperation(currentKey);
+    }
+});
