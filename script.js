@@ -30,6 +30,7 @@ let righOperand = "";
 let operation = "";
 let isLeft = true;
 let bigNum = false;
+const MAX_DIGITS = 11;
 
 const display = document.querySelector(`.display_container`);
 
@@ -50,7 +51,7 @@ function makeOperation(item){
         if (bigNum){
             bigNum = false;
         }
-        if (leftOperand.length > 10){
+        if (leftOperand.length > MAX_DIGITS){
             console.log(bigNum);
             bigNum = true;
         }
@@ -61,9 +62,9 @@ function makeOperation(item){
     if (operationArray.includes(content)){
         isLeft = false;
         if (leftOperand && righOperand){
-            leftOperand = `${operate(operation, +leftOperand, +righOperand)}`;
-            if (leftOperand.length > 10){
-                console.log(bigNum);
+            leftOperand = `${(operate(operation, +leftOperand, +righOperand)).toFixed(7)}`;
+            if (leftOperand.length > MAX_DIGITS){
+                console.log(bigNum, leftOperand);
                 bigNum = true;
             }
             righOperand = "";
@@ -91,9 +92,9 @@ function makeOperation(item){
         }
     }
     else if (content == '='){
-        leftOperand = `${operate(operation, +leftOperand, +righOperand)}`;
-        if (leftOperand.length > 10){
-            console.log(bigNum);
+        leftOperand = `${(operate(operation, +leftOperand, +righOperand)).toFixed(7)}`;
+        if (leftOperand.length > MAX_DIGITS){
+            console.log(bigNum, leftOperand);
             bigNum = true;
         }
         righOperand = "";
@@ -105,8 +106,16 @@ function makeOperation(item){
             btn.classList.remove('active');
         });
         if (isLeft){
-            leftOperand += content;
-            leftOperand = `${+leftOperand}`;
+            if (content === '.'){
+                if (!leftOperand.includes('.'))
+                    console.log(content);
+                    leftOperand += content;
+                    leftOperand = `${leftOperand}`;
+            }
+            else {
+                leftOperand += content;
+                leftOperand = `${+leftOperand}`;
+            }
         }
         else {
             if (operation){
