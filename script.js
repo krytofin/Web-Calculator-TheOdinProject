@@ -31,8 +31,18 @@ let operation = "";
 let isLeft = true;
 let bigNum = false;
 const MAX_DIGITS = 11;
+let prevOperation;
 
 const display = document.querySelector(`.display_container`);
+
+function appendChar(operand, ch){
+    if (ch === '.'){
+        if (operand.includes('.')) return operand;
+        return (operand || '0') + '.';
+    }
+    if (operand === '0') return ch;
+    return operand + ch;
+}
 
 function makeOperation(item){
     let content;
@@ -52,23 +62,19 @@ function makeOperation(item){
     else
         display.textContent = `${righOperand}`;
 
-    if (leftOperand)
-        leftOperand = `${+leftOperand}`;
-        if (bigNum){
-            bigNum = false;
-        }
-        if (leftOperand.length > MAX_DIGITS){
-            console.log(bigNum);
-            bigNum = true;
-        }
-    if (righOperand)
-        righOperand = `${+righOperand}`;
+    if (bigNum){
+        bigNum = false;
+    }
+    if (leftOperand.length > MAX_DIGITS){
+        console.log(bigNum);
+        bigNum = true;
+    }
 
 
     if (operationArray.includes(content)){
         isLeft = false;
         if (leftOperand && righOperand){
-            leftOperand = `${(operate(operation, +leftOperand, +righOperand)).toFixed(7)}`;
+            leftOperand = `${+(operate(operation, +leftOperand, +righOperand)).toFixed(7)}`;
             if (leftOperand.length > MAX_DIGITS){
                 console.log(bigNum, leftOperand);
                 bigNum = true;
@@ -98,8 +104,8 @@ function makeOperation(item){
             righOperand = righOperand.slice(0, -1);
         }
     }
-    else if (content == '='){
-        leftOperand = `${(operate(operation, +leftOperand, +righOperand)).toFixed(7)}`;
+    else if (content == '=' || content == 'Enter'){
+        leftOperand = `${+(operate(operation, +leftOperand, +righOperand)).toFixed(7)}`;
         if (leftOperand.length > MAX_DIGITS){
             console.log(bigNum, leftOperand);
             bigNum = true;
@@ -113,21 +119,11 @@ function makeOperation(item){
             btn.classList.remove('active');
         });
         if (isLeft){
-            if (content === '.'){
-                if (!leftOperand.includes('.'))
-                    console.log(content);
-                    leftOperand += content;
-                    leftOperand = `${leftOperand}`;
-            }
-            else {
-                leftOperand += content;
-                leftOperand = `${+leftOperand}`;
-            }
+            leftOperand = appendChar(leftOperand, content);
         }
         else {
             if (operation){
-                righOperand += content;
-                righOperand = `${+righOperand}`;
+                righOperand = appendChar(righOperand, content);
             }
         }
     }
@@ -142,7 +138,7 @@ function makeOperation(item){
         display.textContent = `${righOperand}`;
     else
         display.textContent = `${leftOperand}`;
-
+    prevOperation = content;
     console.log(leftOperand, righOperand, operation);
 }
 let functionalButtons = document.querySelectorAll(`.operation`);
@@ -153,15 +149,14 @@ allButtons.forEach((item)=>{
     })
 })
 
-let avaliableKeys = ['.', "=", '+', '-', '*', '/', 'Delete', "Backspace"];
+let avaliableKeys = ['.', "=", '+', '-', '*', '/', 'Delete', "Backspace", "Enter"];
 for (let i=0; i<10; i++){
     avaliableKeys.push(String(i));
 }
 
 document.addEventListener(`keydown`, (evt) =>{
-    let currentKey = evt.key;
+    let currentKey = evt.key;   
     if (avaliableKeys.includes(currentKey)){
-        console.log(currentKey);
         makeOperation(currentKey);
     }
 });
